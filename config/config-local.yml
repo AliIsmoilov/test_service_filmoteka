@@ -23,6 +23,6 @@ postgres:
   PostgresqlPort: 5432
   PostgresqlUser: postgres
   PostgresqlPassword: 12345
-  PostgresqlDbname: test_service_filmoteka
+  PostgresqlDbname: filmoteka_db
   PostgresqlSslmode: false
   PgDriver: pgx

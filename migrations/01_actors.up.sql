@@ -8,7 +8,7 @@ CREATE TYPE gender AS ENUM('male', 'female');
 
 CREATE TABLE actors
 (
-    id UUID PRIMARY KEY         DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY NOT NULL,
     name    VARCHAR(512)  NOT NULL CHECK ( name <> '' ),
     gender gender,
     birth_date VARCHAR(56),

@@ -60,7 +60,7 @@ func NewPsqlDB(c *config.Config) (*gorm.DB, error) {
 		logger.Config{
 			SlowThreshold: time.Second * 1, // Slow SQL threshold
 			// LogLevel:                  logger.Info,                                               // For debugging you can set Info level
-			LogLevel: logger.Error, // For debugging you can set Info level
+			LogLevel: logger.Info, // For debugging you can set Info level
 			// IgnoreRecordNotFoundError: false,        // Ignore ErrRecordNotFound error for logger
 			// ParameterizedQueries:      false,        // Don't include params in the SQL log
 			Colorful: true, // Disable color

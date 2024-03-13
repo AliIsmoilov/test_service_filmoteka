@@ -25,8 +25,8 @@ func (s *Server) MapHandlers(e *echo.Echo) error {
 
 	// Init repositories
 	cRepo := repoRepository.NewActorsRepository(s.db)
-	commUC := repoUseCase.NewToDosUseCase(s.cfg, cRepo, s.logger)
-	todoHandlers := repoHttp.NewBlogHandlers(s.cfg, commUC, s.logger)
+	commUC := repoUseCase.NewActorsUseCase(s.cfg, cRepo, s.logger)
+	actorsHandlers := repoHttp.NewHandler(s.cfg, commUC, s.logger)
 	docs.SwaggerInfo.Version = "1.0"
 	docs.SwaggerInfo.Title = "App API"
 	docs.SwaggerInfo.Description = "REST API."
@@ -59,8 +59,8 @@ func (s *Server) MapHandlers(e *echo.Echo) error {
 	v1 := e.Group("/v1")
 
 	health := v1.Group("/health")
-	todoGroup := v1.Group("/blogs")
-	repoHttp.MapToDosRoutes(todoGroup, todoHandlers)
+	actorsGroup := v1.Group("/actors")
+	repoHttp.MapToDosRoutes(actorsGroup, actorsHandlers)
 
 	health.GET("", func(c echo.Context) error {
 		return c.JSON(http.StatusOK, map[string]string{"status": "healthy!"})

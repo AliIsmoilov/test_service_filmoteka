@@ -9,35 +9,34 @@ import (
 	"test_service_filmoteka/config"
 	"test_service_filmoteka/internal/models"
 	repos "test_service_filmoteka/internal/repo"
-	todos "test_service_filmoteka/internal/repo"
 	"test_service_filmoteka/pkg/httpErrors"
 	"test_service_filmoteka/pkg/logger"
 	"test_service_filmoteka/pkg/utils"
 )
 
 // Actor handlers
-type blogHandlers struct {
+type actorHandlers struct {
 	cfg      *config.Config
 	actorsUC repos.ActorsUseCase
 	logger   logger.Logger
 }
 
 // NewBlogHandlers Actor handlers constructor
-func NewBlogHandlers(cfg *config.Config, actorsUC repos.ActorsUseCase, logger logger.Logger) todos.Handlers {
-	return &blogHandlers{cfg: cfg, actorsUC: actorsUC, logger: logger}
+func NewHandler(cfg *config.Config, actorsUC repos.ActorsUseCase, logger logger.Logger) repos.Handlers {
+	return &actorHandlers{cfg: cfg, actorsUC: actorsUC, logger: logger}
 }
 
-// CreateBlog
-// @Summary CreateBlog new actor
+// CreateActor
+// @Summary create new actor
 // @Description create new actor
 // @Tags Actor
 // @Accept  json
 // @Produce  json
-// @Param body body models.BlogSwagger true "body"
+// @Param body body models.ActorSwagger true "body"
 // @Success 201 {object} models.Actor
 // @Failure 500 {object} httpErrors.RestErr
-// @Router /blogs [post]
-func (h *blogHandlers) Create() echo.HandlerFunc {
+// @Router /actors [post]
+func (h *actorHandlers) Create() echo.HandlerFunc {
 	return func(c echo.Context) error {
 
 		actor := &models.Actor{}
@@ -45,6 +44,7 @@ func (h *blogHandlers) Create() echo.HandlerFunc {
 			return utils.ErrResponseWithLog(c, h.logger, err)
 		}
 
+		actor.ID = uuid.New()
 		createdActor, err := h.actorsUC.Create(c.Request().Context(), actor)
 		if err != nil {
 			utils.LogResponseError(c, h.logger, err)
@@ -62,14 +62,14 @@ func (h *blogHandlers) Create() echo.HandlerFunc {
 // @Accept  json
 // @Produce  json
 // @Param id path string true "id"
-// @Param body body models.BlogSwagger true "body"
-// @Success 200 {object} models.BlogSwagger
+// @Param body body models.ActorSwagger true "body"
+// @Success 200 {object} models.ActorSwagger
 // @Failure 500 {object} httpErrors.RestErr
-// @Router /blogs/{id} [put]
-func (h *blogHandlers) Update() echo.HandlerFunc {
+// @Router /actors/{id} [put]
+func (h *actorHandlers) Update() echo.HandlerFunc {
 	return func(c echo.Context) error {
 
-		blogsID, err := uuid.Parse(c.Param("id"))
+		id, err := uuid.Parse(c.Param("id"))
 		if err != nil {
 			utils.LogResponseError(c, h.logger, err)
 			return c.JSON(httpErrors.ErrorResponse(err))
@@ -82,8 +82,10 @@ func (h *blogHandlers) Update() echo.HandlerFunc {
 		}
 
 		updatedToDo, err := h.actorsUC.Update(c.Request().Context(), &models.Actor{
-			ID: blogsID,
-			// Title: comm.Title,
+			ID:        id,
+			Name:      comm.Name,
+			Gender:    comm.Gender,
+			BirthDate: comm.BirthDate,
 		})
 		if err != nil {
 			utils.LogResponseError(c, h.logger, err)
@@ -103,8 +105,8 @@ func (h *blogHandlers) Update() echo.HandlerFunc {
 // @Param id path string true "id"
 // @Success 200 {string} string	"ok"
 // @Failure 500 {object} httpErrors.RestErr
-// @Router /blogs/{id} [delete]
-func (h *blogHandlers) Delete() echo.HandlerFunc {
+// @Router /actors/{id} [delete]
+func (h *actorHandlers) Delete() echo.HandlerFunc {
 	return func(c echo.Context) error {
 
 		blogsID, err := uuid.Parse(c.Param("id"))
@@ -131,8 +133,8 @@ func (h *blogHandlers) Delete() echo.HandlerFunc {
 // @Param id path string true "id"
 // @Success 200 {object} models.Actor
 // @Failure 500 {object} httpErrors.RestErr
-// @Router /blogs/{id} [get]
-func (h *blogHandlers) GetByID() echo.HandlerFunc {
+// @Router /actors/{id} [get]
+func (h *actorHandlers) GetByID() echo.HandlerFunc {
 	return func(c echo.Context) error {
 
 		blogsID, err := uuid.Parse(c.Param("id"))
@@ -157,13 +159,13 @@ func (h *blogHandlers) GetByID() echo.HandlerFunc {
 // @Tags Actor
 // @Accept  json
 // @Produce  json
-// @Param title query string false "title"
+// @Param search query string false "search by name"
 // @Param page query int false "page number" Format(page)
-// @Param size query int false "number of elements per page" Format(size)
-// @Success 200 {object} models.BlogsList
+// @Param limit query int false "number of elements per page" Format(limit)
+// @Success 200 {object} models.ActorsListResp
 // @Failure 500 {object} httpErrors.RestErr
-// @Router /blogs/list [get]
-func (h *blogHandlers) GetAll() echo.HandlerFunc {
+// @Router /actors/list [get]
+func (h *actorHandlers) GetAll() echo.HandlerFunc {
 	return func(c echo.Context) error {
 
 		pq, err := utils.GetPaginationFromCtx(c)
@@ -172,7 +174,11 @@ func (h *blogHandlers) GetAll() echo.HandlerFunc {
 			return c.JSON(httpErrors.ErrorResponse(err))
 		}
 
-		toDoList, err := h.actorsUC.GetAll(c.Request().Context(), c.QueryParam("title"), pq)
+		toDoList, err := h.actorsUC.GetAll(c.Request().Context(), models.ActorsListReq{
+			Limit:  uint32(pq.Limit),
+			Page:   uint32(pq.Page),
+			Search: pq.Search,
+		})
 		if err != nil {
 			utils.LogResponseError(c, h.logger, err)
 			return c.JSON(httpErrors.ErrorResponse(err))
