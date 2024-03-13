@@ -14,22 +14,22 @@ const (
 
 // Pagination query params
 type PaginationQuery struct {
-	Size    int    `json:"size,omitempty"`
-	Page    int    `json:"page,omitempty"`
-	OrderBy string `json:"orderBy,omitempty"`
+	Limit  int    `json:"limit,omitempty"`
+	Page   int    `json:"page,omitempty"`
+	Search string `json:"search,omitempty"`
 }
 
 // Set page size
 func (q *PaginationQuery) SetSize(sizeQuery string) error {
 	if sizeQuery == "" {
-		q.Size = defaultSize
+		q.Limit = defaultSize
 		return nil
 	}
 	n, err := strconv.Atoi(sizeQuery)
 	if err != nil {
 		return err
 	}
-	q.Size = n
+	q.Limit = n
 
 	return nil
 }
@@ -37,7 +37,7 @@ func (q *PaginationQuery) SetSize(sizeQuery string) error {
 // Set page number
 func (q *PaginationQuery) SetPage(pageQuery string) error {
 	if pageQuery == "" {
-		q.Size = 0
+		q.Limit = 0
 		return nil
 	}
 	n, err := strconv.Atoi(pageQuery)
@@ -49,28 +49,28 @@ func (q *PaginationQuery) SetPage(pageQuery string) error {
 	return nil
 }
 
-// Set order by
-func (q *PaginationQuery) SetOrderBy(orderByQuery string) {
-	q.OrderBy = orderByQuery
-}
+// // Set order by
+// func (q *PaginationQuery) SetOrderBy(orderByQuery string) {
+// 	q.OrderBy = orderByQuery
+// }
 
 // Get offset
 func (q *PaginationQuery) GetOffset() int {
 	if q.Page == 0 {
 		return 0
 	}
-	return (q.Page - 1) * q.Size
+	return (q.Page - 1) * q.Limit
 }
 
 // Get limit
 func (q *PaginationQuery) GetLimit() int {
-	return q.Size
+	return q.Page
 }
 
-// Get OrderBy
-func (q *PaginationQuery) GetOrderBy() string {
-	return q.OrderBy
-}
+// // Get OrderBy
+// func (q *PaginationQuery) GetOrderBy() string {
+// 	return q.OrderBy
+// }
 
 // Get OrderBy
 func (q *PaginationQuery) GetPage() int {
@@ -79,11 +79,11 @@ func (q *PaginationQuery) GetPage() int {
 
 // Get OrderBy
 func (q *PaginationQuery) GetSize() int {
-	return q.Size
+	return q.Limit
 }
 
 func (q *PaginationQuery) GetQueryString() string {
-	return fmt.Sprintf("page=%v&size=%v&orderBy=%s", q.GetPage(), q.GetSize(), q.GetOrderBy())
+	return fmt.Sprintf("page=%v&size=%v&orderBy=%s", q.GetPage(), q.GetSize())
 }
 
 // Get pagination query struct from
@@ -92,10 +92,11 @@ func GetPaginationFromCtx(c echo.Context) (*PaginationQuery, error) {
 	if err := q.SetPage(c.QueryParam("page")); err != nil {
 		return nil, err
 	}
-	if err := q.SetSize(c.QueryParam("size")); err != nil {
+	if err := q.SetSize(c.QueryParam("limit")); err != nil {
 		return nil, err
 	}
-	q.SetOrderBy(c.QueryParam("orderBy"))
+	q.Search = c.QueryParam("search")
+	fmt.Println(c.QueryParam("search"))
 
 	return q, nil
 }

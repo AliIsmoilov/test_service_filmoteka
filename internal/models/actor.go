@@ -6,19 +6,17 @@ import (
 	"github.com/google/uuid"
 )
 
-// Blog Swagger model
+// Actor Swagger model
 type ActorSwagger struct {
-	Title string `json:"title" db:"title" validate:"required,gte=3"`
+	Name      string `json:"name" gorm:"name" validate:"required,gte=3"`
+	Gender    string `json:"gender" gorm:"gender"`
+	BirthDate string `json:"birth_date" gorm:"birth_date"`
 }
 
 // All ToDo response
-type ActorsList struct {
-	TotalCount int     `json:"total_count"`
-	TotalPages int     `json:"total_pages"`
-	Page       int     `json:"page"`
-	Size       int     `json:"size"`
-	HasMore    bool    `json:"has_more"`
-	Actors     []Actor `json:"actors"`
+type ActorsListResp struct {
+	Count  int     `json:"count"`
+	Actors []Actor `json:"actors"`
 }
 
 type Actor struct {
@@ -26,7 +24,13 @@ type Actor struct {
 	Name      string    `json:"name" gorm:"name" validate:"required,gte=3"`
 	Gender    string    `json:"gender" gorm:"gender"`
 	BirthDate string    `json:"birth_date" gorm:"birth_date"`
-	CreatedAt time.Time
-	UpdatedAt time.Time `gorm:"<-:update"`
-	DeletedAt time.Time `gorm:"<-:update"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at" gorm:"<-:update"`
+	DeletedAt time.Time `json:"deleted_at" gorm:"<-:update"`
+}
+
+type ActorsListReq struct {
+	Limit  uint32
+	Page   uint32
+	Search string
 }

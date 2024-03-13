@@ -5,18 +5,17 @@ import (
 	"context"
 
 	"test_service_filmoteka/internal/models"
-	"test_service_filmoteka/pkg/utils"
 
 	"github.com/google/uuid"
 )
 
 // Actor repository interface
 type ActorsRepository interface {
-	Create(ctx context.Context, blog *models.Actor) (*models.Actor, error)
-	Update(ctx context.Context, todo *models.Actor) (*models.Actor, error)
-	Delete(ctx context.Context, todoID uuid.UUID) error
-	GetByID(ctx context.Context, blogID uuid.UUID) (*models.Actor, error)
-	GetAll(ctx context.Context, title string, query *utils.PaginationQuery) (*models.ActorsList, error)
+	Create(ctx context.Context, actor *models.Actor) (*models.Actor, error)
+	Update(ctx context.Context, actor *models.Actor) (*models.Actor, error)
+	Delete(ctx context.Context, id uuid.UUID) error
+	GetByID(ctx context.Context, id uuid.UUID) (*models.Actor, error)
+	GetAll(ctx context.Context, req models.ActorsListReq) (*models.ActorsListResp, error)
 
 	// CreateNews(ctx context.Context, new *models.News) (*models.News, error)
 }

@@ -5,7 +5,6 @@ import (
 	"context"
 
 	"test_service_filmoteka/internal/models"
-	"test_service_filmoteka/pkg/utils"
 
 	"github.com/google/uuid"
 )
@@ -16,5 +15,5 @@ type ActorsUseCase interface {
 	Update(ctx context.Context, blog *models.Actor) (*models.Actor, error)
 	Delete(ctx context.Context, blogID uuid.UUID) error
 	GetByID(ctx context.Context, blogID uuid.UUID) (*models.Actor, error)
-	GetAll(ctx context.Context, title string, query *utils.PaginationQuery) (*models.ActorsList, error)
+	GetAll(ctx context.Context, req models.ActorsListReq) (*models.ActorsListResp, error)
 }

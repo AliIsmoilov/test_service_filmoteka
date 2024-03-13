@@ -15,7 +15,7 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/blogs": {
+        "/actors": {
             "post": {
                 "description": "create new actor",
                 "consumes": [
@@ -27,7 +27,7 @@ const docTemplate = `{
                 "tags": [
                     "Actor"
                 ],
-                "summary": "CreateBlog new actor",
+                "summary": "create new actor",
                 "parameters": [
                     {
                         "description": "body",
@@ -35,7 +35,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.BlogSwagger"
+                            "$ref": "#/definitions/models.ActorSwagger"
                         }
                     }
                 ],
@@ -53,7 +53,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/blogs/list": {
+        "/actors/list": {
             "get": {
                 "description": "Get all actor",
                 "consumes": [
@@ -69,8 +69,8 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "title",
-                        "name": "title",
+                        "description": "search by name",
+                        "name": "search",
                         "in": "query"
                     },
                     {
@@ -82,9 +82,9 @@ const docTemplate = `{
                     },
                     {
                         "type": "integer",
-                        "format": "size",
+                        "format": "limit",
                         "description": "number of elements per page",
-                        "name": "size",
+                        "name": "limit",
                         "in": "query"
                     }
                 ],
@@ -92,7 +92,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.BlogsList"
+                            "$ref": "#/definitions/models.ActorsListResp"
                         }
                     },
                     "500": {
@@ -102,7 +102,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/blogs/{id}": {
+        "/actors/{id}": {
             "get": {
                 "description": "Get actor by id",
                 "consumes": [
@@ -163,7 +163,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.BlogSwagger"
+                            "$ref": "#/definitions/models.ActorSwagger"
                         }
                     }
                 ],
@@ -171,7 +171,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.BlogSwagger"
+                            "$ref": "#/definitions/models.ActorSwagger"
                         }
                     },
                     "500": {
@@ -220,34 +220,52 @@ const docTemplate = `{
         "models.Actor": {
             "type": "object",
             "required": [
-                "title"
+                "name"
             ],
             "properties": {
+                "birth_date": {
+                    "type": "string"
+                },
                 "created_at": {
+                    "type": "string"
+                },
+                "deleted_at": {
+                    "type": "string"
+                },
+                "gender": {
                     "type": "string"
                 },
                 "id": {
                     "type": "string"
                 },
-                "title": {
+                "name": {
                     "type": "string",
                     "minLength": 3
+                },
+                "updated_at": {
+                    "type": "string"
                 }
             }
         },
-        "models.BlogSwagger": {
+        "models.ActorSwagger": {
             "type": "object",
             "required": [
-                "title"
+                "name"
             ],
             "properties": {
-                "title": {
+                "birth_date": {
+                    "type": "string"
+                },
+                "gender": {
+                    "type": "string"
+                },
+                "name": {
                     "type": "string",
                     "minLength": 3
                 }
             }
         },
-        "models.BlogsList": {
+        "models.ActorsListResp": {
             "type": "object",
             "properties": {
                 "actors": {
@@ -256,19 +274,7 @@ const docTemplate = `{
                         "$ref": "#/definitions/models.Actor"
                     }
                 },
-                "has_more": {
-                    "type": "boolean"
-                },
-                "page": {
-                    "type": "integer"
-                },
-                "size": {
-                    "type": "integer"
-                },
-                "total_count": {
-                    "type": "integer"
-                },
-                "total_pages": {
+                "count": {
                     "type": "integer"
                 }
             }
