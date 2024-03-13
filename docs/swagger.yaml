@@ -1,0 +1,176 @@
+definitions:
+  models.Actor:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: string
+      title:
+        minLength: 3
+        type: string
+    required:
+    - title
+    type: object
+  models.BlogSwagger:
+    properties:
+      title:
+        minLength: 3
+        type: string
+    required:
+    - title
+    type: object
+  models.BlogsList:
+    properties:
+      actors:
+        items:
+          $ref: '#/definitions/models.Actor'
+        type: array
+      has_more:
+        type: boolean
+      page:
+        type: integer
+      size:
+        type: integer
+      total_count:
+        type: integer
+      total_pages:
+        type: integer
+    type: object
+info:
+  contact: {}
+paths:
+  /blogs:
+    post:
+      consumes:
+      - application/json
+      description: create new actor
+      parameters:
+      - description: body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/models.BlogSwagger'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.Actor'
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: CreateBlog new actor
+      tags:
+      - Actor
+  /blogs/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: delete actor
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Delete actor
+      tags:
+      - Actor
+    get:
+      consumes:
+      - application/json
+      description: Get actor by id
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Actor'
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Get actor
+      tags:
+      - Actor
+    put:
+      consumes:
+      - application/json
+      description: update new actor
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/models.BlogSwagger'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.BlogSwagger'
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Update actor
+      tags:
+      - Actor
+  /blogs/list:
+    get:
+      consumes:
+      - application/json
+      description: Get all actor
+      parameters:
+      - description: title
+        in: query
+        name: title
+        type: string
+      - description: page number
+        format: page
+        in: query
+        name: page
+        type: integer
+      - description: number of elements per page
+        format: size
+        in: query
+        name: size
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.BlogsList'
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Get Actor
+      tags:
+      - Actor
+swagger: "2.0"
