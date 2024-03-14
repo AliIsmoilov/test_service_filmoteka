@@ -14,4 +14,7 @@ type ActorHandlers interface {
 type FilmHandlers interface {
 	Create() echo.HandlerFunc
 	GetAll() echo.HandlerFunc
+	Update() echo.HandlerFunc
+	Delete() echo.HandlerFunc
+	GetByID() echo.HandlerFunc
 }

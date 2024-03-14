@@ -6,8 +6,7 @@ import (
 	"github.com/google/uuid"
 )
 
-func ToFilm(req *models.FilmSwagger) *models.Film {
-	id := uuid.New()
+func ToFilm(req *models.FilmSwagger, id uuid.UUID) *models.Film {
 	return &models.Film{
 		ID:          id,
 		Title:       req.Title,

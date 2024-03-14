@@ -22,7 +22,7 @@ type ActorsUseCase interface {
 type FilmUseCase interface {
 	Create(ctx context.Context, film *models.Film) (*models.Film, error)
 	GetAll(ctx context.Context, req models.FilmsListReq) (*models.FilmsListResp, error)
-	// Update(ctx context.Context, blog *models.Actor) (*models.Actor, error)
-	// Delete(ctx context.Context, blogID uuid.UUID) error
-	// GetByID(ctx context.Context, blogID uuid.UUID) (*models.Actor, error)
+	Update(ctx context.Context, film *models.Film) (*models.Film, error)
+	Delete(ctx context.Context, id uuid.UUID) error
+	GetByID(ctx context.Context, id uuid.UUID) (*models.Film, error)
 }

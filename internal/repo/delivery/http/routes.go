@@ -23,4 +23,7 @@ func MapActorsRoutes(group *echo.Group, h repos.ActorHandlers) {
 func MapFilmRoutes(group *echo.Group, h repos.FilmHandlers) {
 	group.POST("", h.Create())
 	group.GET("/list", h.GetAll())
+	group.DELETE("/:id", h.Delete())
+	group.PUT("/:id", h.Update())
+	group.GET("/:id", h.GetByID())
 }

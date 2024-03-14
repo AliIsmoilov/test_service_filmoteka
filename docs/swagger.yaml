@@ -264,6 +264,82 @@ paths:
       summary: create new film
       tags:
       - Film
+  /films/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: delete film
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Delete film
+      tags:
+      - Film
+    get:
+      consumes:
+      - application/json
+      description: Get film by id
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Film'
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Get film
+      tags:
+      - Film
+    put:
+      consumes:
+      - application/json
+      description: update film actor
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/models.FilmSwagger'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.FilmSwagger'
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Update film
+      tags:
+      - Film
   /films/list:
     get:
       consumes:

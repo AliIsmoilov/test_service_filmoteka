@@ -69,6 +69,7 @@ func (r *actorsRepo) GetByID(ctx context.Context, id uuid.UUID) (*models.Actor, 
 	resp := models.Actor{}
 	res := r.db.
 		Table("actors").
+		Where("deleted_at IS NULL").
 		Where("id = ?", id).
 		First(&resp)
 	if res.Error != nil {
