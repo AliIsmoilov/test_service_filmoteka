@@ -22,7 +22,7 @@ type actorHandlers struct {
 }
 
 // NewBlogHandlers Actor handlers constructor
-func NewHandler(cfg *config.Config, actorsUC repos.ActorsUseCase, logger logger.Logger) repos.Handlers {
+func NewHandler(cfg *config.Config, actorsUC repos.ActorsUseCase, logger logger.Logger) repos.ActorHandlers {
 	return &actorHandlers{cfg: cfg, actorsUC: actorsUC, logger: logger}
 }
 
@@ -174,7 +174,7 @@ func (h *actorHandlers) GetAll() echo.HandlerFunc {
 			return c.JSON(httpErrors.ErrorResponse(err))
 		}
 
-		toDoList, err := h.actorsUC.GetAll(c.Request().Context(), models.ActorsListReq{
+		actorList, err := h.actorsUC.GetAll(c.Request().Context(), models.ActorsListReq{
 			Limit:  uint32(pq.Limit),
 			Page:   uint32(pq.Page),
 			Search: pq.Search,
@@ -184,6 +184,6 @@ func (h *actorHandlers) GetAll() echo.HandlerFunc {
 			return c.JSON(httpErrors.ErrorResponse(err))
 		}
 
-		return c.JSON(http.StatusOK, toDoList)
+		return c.JSON(http.StatusOK, actorList)
 	}
 }

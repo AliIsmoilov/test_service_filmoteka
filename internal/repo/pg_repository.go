@@ -19,3 +19,13 @@ type ActorsRepository interface {
 
 	// CreateNews(ctx context.Context, new *models.News) (*models.News, error)
 }
+
+type FilmsRepository interface {
+	Create(ctx context.Context, film *models.Film) (*models.Film, error)
+	GetAll(ctx context.Context, req models.FilmsListReq) (*models.FilmsListResp, error)
+	// Update(ctx context.Context, actor *models.Actor) (*models.Actor, error)
+	// Delete(ctx context.Context, id uuid.UUID) error
+	// GetByID(ctx context.Context, id uuid.UUID) (*models.Actor, error)
+
+	// CreateNews(ctx context.Context, new *models.News) (*models.News, error)
+}

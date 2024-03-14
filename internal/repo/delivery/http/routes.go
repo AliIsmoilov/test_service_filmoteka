@@ -3,11 +3,11 @@ package http
 import (
 	"github.com/labstack/echo/v4"
 
-	todos "test_service_filmoteka/internal/repo"
+	repos "test_service_filmoteka/internal/repo"
 )
 
-// Map todos routes
-func MapToDosRoutes(group *echo.Group, h todos.Handlers) {
+// Map actors routes
+func MapActorsRoutes(group *echo.Group, h repos.ActorHandlers) {
 	// docs.SwaggerInfo.Title = cfg.ServiceName
 	// docs.SwaggerInfo.Version = cfg.Version
 	// docs.SwaggerInfo.Schemes = []string{cfg.HTTPScheme}
@@ -16,4 +16,11 @@ func MapToDosRoutes(group *echo.Group, h todos.Handlers) {
 	group.PUT("/:id", h.Update())
 	group.GET("/list", h.GetAll())
 	group.GET("/:id", h.GetByID())
+
+}
+
+// Map actors routes
+func MapFilmRoutes(group *echo.Group, h repos.FilmHandlers) {
+	group.POST("", h.Create())
+	group.GET("/list", h.GetAll())
 }

@@ -40,6 +40,68 @@ definitions:
       count:
         type: integer
     type: object
+  models.Film:
+    properties:
+      created_at:
+        type: string
+      deleted_at:
+        type: string
+      description:
+        type: string
+      film_actors:
+        items:
+          $ref: '#/definitions/models.FilmActor'
+        type: array
+      id:
+        type: string
+      rating:
+        type: integer
+      release_date:
+        type: string
+      title:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  models.FilmActor:
+    properties:
+      actor:
+        $ref: '#/definitions/models.Actor'
+      actor_id:
+        type: string
+      created_at:
+        type: string
+      deleted_at:
+        type: string
+      film_id:
+        type: string
+      id:
+        type: string
+    type: object
+  models.FilmSwagger:
+    properties:
+      actor_ids:
+        items:
+          type: string
+        type: array
+      description:
+        type: string
+      rating:
+        type: integer
+      release_date:
+        type: string
+      title:
+        type: string
+    type: object
+  models.FilmsListResp:
+    properties:
+      count:
+        type: integer
+      films:
+        items:
+          $ref: '#/definitions/models.Film'
+        type: array
+    type: object
 info:
   contact: {}
 paths:
@@ -177,4 +239,62 @@ paths:
       summary: Get Actor
       tags:
       - Actor
+  /films:
+    post:
+      consumes:
+      - application/json
+      description: create new film
+      parameters:
+      - description: body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/models.FilmSwagger'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.Film'
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: create new film
+      tags:
+      - Film
+  /films/list:
+    get:
+      consumes:
+      - application/json
+      description: Get all films
+      parameters:
+      - description: search by title
+        in: query
+        name: search
+        type: string
+      - description: page number
+        format: page
+        in: query
+        name: page
+        type: integer
+      - description: number of elements per page
+        format: limit
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.FilmsListResp'
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Get Films
+      tags:
+      - Film
 swagger: "2.0"

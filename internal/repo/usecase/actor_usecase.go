@@ -11,21 +11,21 @@ import (
 	"github.com/google/uuid"
 )
 
-// ToDos UseCase
+// Actor UseCase
 type actorsUC struct {
 	cfg        *config.Config
 	actorsRepo repos.ActorsRepository
 	logger     logger.Logger
 }
 
-// ToDos UseCase constructor
+// Actor UseCase constructor
 func NewActorsUseCase(cfg *config.Config, actorsRepo repos.ActorsRepository, logger logger.Logger) repos.ActorsUseCase {
 	return &actorsUC{cfg: cfg, actorsRepo: actorsRepo, logger: logger}
 }
 
 // Create actor
-func (u *actorsUC) Create(ctx context.Context, blog *models.Actor) (*models.Actor, error) {
-	return u.actorsRepo.Create(ctx, blog)
+func (u *actorsUC) Create(ctx context.Context, actor *models.Actor) (*models.Actor, error) {
+	return u.actorsRepo.Create(ctx, actor)
 }
 
 // Update actor
@@ -39,9 +39,9 @@ func (u *actorsUC) Update(ctx context.Context, actor *models.Actor) (*models.Act
 }
 
 // Delete actor
-func (u *actorsUC) Delete(ctx context.Context, todoID uuid.UUID) error {
+func (u *actorsUC) Delete(ctx context.Context, id uuid.UUID) error {
 
-	if err := u.actorsRepo.Delete(ctx, todoID); err != nil {
+	if err := u.actorsRepo.Delete(ctx, id); err != nil {
 		return err
 	}
 
@@ -49,12 +49,12 @@ func (u *actorsUC) Delete(ctx context.Context, todoID uuid.UUID) error {
 }
 
 // GetByID actor
-func (u *actorsUC) GetByID(ctx context.Context, blogID uuid.UUID) (*models.Actor, error) {
+func (u *actorsUC) GetByID(ctx context.Context, id uuid.UUID) (*models.Actor, error) {
 
-	return u.actorsRepo.GetByID(ctx, blogID)
+	return u.actorsRepo.GetByID(ctx, id)
 }
 
-// GetAll todos
+// GetAll actors
 func (u *actorsUC) GetAll(ctx context.Context, req models.ActorsListReq) (*models.ActorsListResp, error) {
 	return u.actorsRepo.GetAll(ctx, req)
 }

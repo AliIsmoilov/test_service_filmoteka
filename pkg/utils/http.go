@@ -121,3 +121,7 @@ func CheckImageFileContentType(fileContent []byte) (string, error) {
 
 	return extension, nil
 }
+
+func BodyParser(r *http.Request, body interface{}) error {
+	return json.NewDecoder(r.Body).Decode(&body)
+}
