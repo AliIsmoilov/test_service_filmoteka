@@ -109,13 +109,13 @@ func (h *actorHandlers) Update() echo.HandlerFunc {
 func (h *actorHandlers) Delete() echo.HandlerFunc {
 	return func(c echo.Context) error {
 
-		blogsID, err := uuid.Parse(c.Param("id"))
+		id, err := uuid.Parse(c.Param("id"))
 		if err != nil {
 			utils.LogResponseError(c, h.logger, err)
 			return c.JSON(httpErrors.ErrorResponse(err))
 		}
 
-		if err = h.actorsUC.Delete(c.Request().Context(), blogsID); err != nil {
+		if err = h.actorsUC.Delete(c.Request().Context(), id); err != nil {
 			utils.LogResponseError(c, h.logger, err)
 			return c.JSON(httpErrors.ErrorResponse(err))
 		}

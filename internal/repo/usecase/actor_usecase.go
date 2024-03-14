@@ -30,12 +30,12 @@ func (u *actorsUC) Create(ctx context.Context, actor *models.Actor) (*models.Act
 
 // Update actor
 func (u *actorsUC) Update(ctx context.Context, actor *models.Actor) (*models.Actor, error) {
-	updatedToDo, err := u.actorsRepo.Update(ctx, actor)
+	updated, err := u.actorsRepo.Update(ctx, actor)
 	if err != nil {
 		return nil, err
 	}
 
-	return updatedToDo, nil
+	return updated, nil
 }
 
 // Delete actor
