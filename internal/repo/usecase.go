@@ -16,6 +16,7 @@ type ActorsUseCase interface {
 	Delete(ctx context.Context, blogID uuid.UUID) error
 	GetByID(ctx context.Context, blogID uuid.UUID) (*models.Actor, error)
 	GetAll(ctx context.Context, req models.ActorsListReq) (*models.ActorsListResp, error)
+	GetActorFilms(ctx context.Context, actorId uuid.UUID) ([]models.FilmActor, error)
 }
 
 // actors use case
@@ -25,4 +26,5 @@ type FilmUseCase interface {
 	Update(ctx context.Context, film *models.Film) (*models.Film, error)
 	Delete(ctx context.Context, id uuid.UUID) error
 	GetByID(ctx context.Context, id uuid.UUID) (*models.Film, error)
+	GetFilmActors(ctx context.Context, filmId uuid.UUID) ([]models.FilmActor, error)
 }

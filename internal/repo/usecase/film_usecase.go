@@ -46,3 +46,8 @@ func (u *filmsUC) GetByID(ctx context.Context, id uuid.UUID) (*models.Film, erro
 func (u *filmsUC) Update(ctx context.Context, film *models.Film) (*models.Film, error) {
 	return u.filmsRepo.Update(ctx, film)
 }
+
+// GetFilmActors
+func (u *filmsUC) GetFilmActors(ctx context.Context, filmId uuid.UUID) ([]models.FilmActor, error) {
+	return u.filmsRepo.GetFilmActors(ctx, filmId)
+}

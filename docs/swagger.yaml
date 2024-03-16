@@ -73,6 +73,8 @@ definitions:
         type: string
       deleted_at:
         type: string
+      film:
+        $ref: '#/definitions/models.Film'
       film_id:
         type: string
       id:
@@ -102,6 +104,15 @@ definitions:
           $ref: '#/definitions/models.Film'
         type: array
     type: object
+  models.GetFilmActorsResp:
+    properties:
+      count:
+        type: integer
+      film_actors:
+        items:
+          $ref: '#/definitions/models.Actor'
+        type: array
+    type: object
 info:
   contact: {}
 paths:
@@ -128,6 +139,30 @@ paths:
           description: Internal Server Error
           schema: {}
       summary: create new actor
+      tags:
+      - Actor
+  /actors/{actor_id}:
+    get:
+      consumes:
+      - application/json
+      description: Get actor films by actor_id
+      parameters:
+      - description: actor_id
+        in: path
+        name: actor_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.GetFilmActorsResp'
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Get actor films
       tags:
       - Actor
   /actors/{id}:
@@ -264,6 +299,30 @@ paths:
       summary: create new film
       tags:
       - Film
+  /films/{film_id}:
+    get:
+      consumes:
+      - application/json
+      description: Get film actors by film_id
+      parameters:
+      - description: film_id
+        in: path
+        name: film_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.GetFilmActorsResp'
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Get film actors
+      tags:
+      - Film
   /films/{id}:
     delete:
       consumes:
@@ -350,6 +409,10 @@ paths:
         in: query
         name: search
         type: string
+      - description: search by actor
+        in: query
+        name: search_by_actor
+        type: string
       - description: page number
         format: page
         in: query
@@ -360,6 +423,10 @@ paths:
         in: query
         name: limit
         type: integer
+      - description: order by title, rating, release_date
+        in: query
+        name: order_by
+        type: string
       produces:
       - application/json
       responses:

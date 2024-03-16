@@ -68,7 +68,7 @@ func LogResponseError(ctx echo.Context, logger logger.Logger, err error) {
 		GetRequestID(ctx),
 		GetIPAddress(ctx),
 		err,
-	)
+	)	
 }
 
 // Read request body and validate

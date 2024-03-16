@@ -16,8 +16,7 @@ type ActorsRepository interface {
 	Delete(ctx context.Context, id uuid.UUID) error
 	GetByID(ctx context.Context, id uuid.UUID) (*models.Actor, error)
 	GetAll(ctx context.Context, req models.ActorsListReq) (*models.ActorsListResp, error)
-
-	// CreateNews(ctx context.Context, new *models.News) (*models.News, error)
+	GetActorFilms(ctx context.Context, actorId uuid.UUID) ([]models.FilmActor, error)
 }
 
 type FilmsRepository interface {
@@ -26,4 +25,5 @@ type FilmsRepository interface {
 	Update(ctx context.Context, film *models.Film) (*models.Film, error)
 	Delete(ctx context.Context, id uuid.UUID) error
 	GetByID(ctx context.Context, id uuid.UUID) (*models.Film, error)
+	GetFilmActors(ctx context.Context, filmId uuid.UUID) ([]models.FilmActor, error)
 }
