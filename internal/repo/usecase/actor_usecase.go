@@ -58,3 +58,8 @@ func (u *actorsUC) GetByID(ctx context.Context, id uuid.UUID) (*models.Actor, er
 func (u *actorsUC) GetAll(ctx context.Context, req models.ActorsListReq) (*models.ActorsListResp, error) {
 	return u.actorsRepo.GetAll(ctx, req)
 }
+
+// GetActorFilms
+func (u *actorsUC) GetActorFilms(ctx context.Context, actorId uuid.UUID) ([]models.FilmActor, error) {
+	return u.actorsRepo.GetActorFilms(ctx, actorId)
+}

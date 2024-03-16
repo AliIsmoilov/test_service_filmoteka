@@ -1,6 +1,8 @@
 package http
 
 import (
+	"errors"
+	"fmt"
 	"net/http"
 
 	"github.com/google/uuid"
@@ -9,8 +11,10 @@ import (
 	"test_service_filmoteka/config"
 	"test_service_filmoteka/internal/models"
 	repos "test_service_filmoteka/internal/repo"
+	"test_service_filmoteka/pkg/constatnts"
 	"test_service_filmoteka/pkg/httpErrors"
 	"test_service_filmoteka/pkg/logger"
+	"test_service_filmoteka/pkg/mappers"
 	"test_service_filmoteka/pkg/utils"
 )
 
@@ -185,5 +189,42 @@ func (h *actorHandlers) GetAll() echo.HandlerFunc {
 		}
 
 		return c.JSON(http.StatusOK, actorList)
+	}
+}
+
+// GetActorFilms
+// @Summary Get actor films
+// @Description Get actor films by actor_id
+// @Tags Actor
+// @Accept  json
+// @Produce  json
+// @Param actor_id path string true "actor_id"
+// @Success 200 {object} models.GetFilmActorsResp
+// @Failure 500 {object} httpErrors.RestErr
+// @Router /actors/{actor_id} [get]
+func (h *actorHandlers) GetActorFilms() echo.HandlerFunc {
+	return func(c echo.Context) error {
+
+		actorID, err := uuid.Parse(c.Param("actor_id"))
+		if err != nil {
+			utils.LogResponseError(c, h.logger, err)
+			return c.JSON(httpErrors.ErrorResponse(err))
+		}
+		if !utils.IsUUID(actorID.String()) {
+			utils.LogResponseError(c, h.logger, fmt.Errorf("%v is not valid uuid", actorID))
+			return c.JSON(http.StatusBadRequest, fmt.Errorf("%v is not valid uuid", actorID).Error())
+		}
+
+		resp, err := h.actorsUC.GetActorFilms(c.Request().Context(), actorID)
+		if err != nil {
+			if errors.Is(err, constatnts.ErrRecordNotFound) {
+				utils.LogResponseError(c, h.logger, err)
+				return c.JSON(http.StatusBadRequest, err.Error())
+			}
+			utils.LogResponseError(c, h.logger, err)
+			return c.JSON(httpErrors.ErrorResponse(err))
+		}
+
+		return c.JSON(http.StatusOK, mappers.ToFilmFromFilmActor(resp))
 	}
 }

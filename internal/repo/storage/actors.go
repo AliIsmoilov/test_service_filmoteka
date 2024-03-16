@@ -117,3 +117,23 @@ func (r *actorsRepo) GetAll(ctx context.Context, req models.ActorsListReq) (*mod
 		Actors: actors,
 	}, nil
 }
+
+// GetActorFilms
+func (r *actorsRepo) GetActorFilms(ctx context.Context, actorId uuid.UUID) ([]models.FilmActor, error) {
+
+	resp := []models.FilmActor{}
+	res := r.db.
+		Table("film_actors").
+		Where("actor_id = ?", actorId).
+		Where("deleted_at IS NULL").
+		Preload("Film").
+		Find(&resp)
+	if res.Error != nil {
+		if errors.Is(res.Error, gorm.ErrRecordNotFound) {
+			return nil, fmt.Errorf("actor not found %w", constatnts.ErrRecordNotFound)
+		}
+		return nil, res.Error
+	}
+
+	return resp, nil
+}

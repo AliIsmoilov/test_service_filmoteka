@@ -38,11 +38,17 @@ func (r *filmsRepo) GetAll(ctx context.Context, req models.FilmsListReq) (*model
 	var count int64
 
 	tx := r.db.Table("films").
-		Where("deleted_at IS NULL")
+		Where("films.deleted_at IS NULL")
 
 	if req.Search != "" {
 		req.Search = "%" + req.Search + "%"
 		tx = tx.Where("title ilike ?", req.Search)
+	}
+	if req.SearchByActor != "" {
+		req.SearchByActor = "%" + req.SearchByActor + "%"
+		tx = tx.Joins("JOIN film_actors ON film_actors.film_id = films.id").
+			Joins("JOIN actors as a ON a.id = film_actors.actor_id").
+			Where("a.name ilike ?", req.SearchByActor)
 	}
 
 	res := tx.Count(&count)
@@ -55,6 +61,12 @@ func (r *filmsRepo) GetAll(ctx context.Context, req models.FilmsListReq) (*model
 			Limit(int(req.Limit))
 	} else if req.Limit > 0 {
 		tx = tx.Limit(int(req.Limit))
+	}
+
+	if req.OrderBy != "" {
+		tx = tx.Order(req.OrderBy)
+	} else {
+		tx = tx.Order("rating DESC")
 	}
 
 	tx = tx.Preload("FilmActors").Preload("FilmActors.Actor").Find(&films)
@@ -151,4 +163,23 @@ func (r *filmsRepo) GetByID(ctx context.Context, id uuid.UUID) (*models.Film, er
 		return &models.Film{}, res.Error
 	}
 	return &resp, nil
+}
+
+// GetFilmActors
+func (r *filmsRepo) GetFilmActors(ctx context.Context, filmId uuid.UUID) ([]models.FilmActor, error) {
+
+	resp := []models.FilmActor{}
+	res := r.db.
+		Table("film_actors").
+		Where("film_id = ?", filmId).
+		Where("deleted_at IS NULL").
+		Preload("Actor").
+		Find(&resp)
+	if res.Error != nil {
+		if errors.Is(res.Error, gorm.ErrRecordNotFound) {
+			return nil, fmt.Errorf("film not found %w", constatnts.ErrRecordNotFound)
+		}
+		return nil, res.Error
+	}
+	return resp, nil
 }

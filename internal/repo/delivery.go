@@ -9,6 +9,7 @@ type ActorHandlers interface {
 	Delete() echo.HandlerFunc
 	GetByID() echo.HandlerFunc
 	GetAll() echo.HandlerFunc
+	GetActorFilms() echo.HandlerFunc
 }
 
 type FilmHandlers interface {
@@ -17,4 +18,5 @@ type FilmHandlers interface {
 	Update() echo.HandlerFunc
 	Delete() echo.HandlerFunc
 	GetByID() echo.HandlerFunc
+	GetFilmActors() echo.HandlerFunc
 }

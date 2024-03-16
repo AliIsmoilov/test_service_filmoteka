@@ -2,6 +2,7 @@ package http
 
 import (
 	"errors"
+	"fmt"
 	"net/http"
 	"test_service_filmoteka/config"
 	"test_service_filmoteka/internal/models"
@@ -44,7 +45,10 @@ func (h *filmHandlers) Create() echo.HandlerFunc {
 		if err := utils.BodyParser(c.Request(), &reqBody); err != nil {
 			return utils.ErrResponseWithLog(c, h.logger, err)
 		}
-
+		if err := reqBody.Validate(); err != nil {
+			utils.LogResponseError(c, h.logger, err)
+			return c.JSON(http.StatusBadRequest, err.Error())
+		}
 		createdFilm, err := h.filmsUs.Create(c.Request().Context(), mappers.ToFilm(reqBody, uuid.New()))
 		if err != nil {
 			utils.LogResponseError(c, h.logger, err)
@@ -62,8 +66,10 @@ func (h *filmHandlers) Create() echo.HandlerFunc {
 // @Accept  json
 // @Produce  json
 // @Param search query string false "search by title"
+// @Param search_by_actor query string false "search by actor"
 // @Param page query int false "page number" Format(page)
 // @Param limit query int false "number of elements per page" Format(limit)
+// @Param order_by query string false "order by title, rating, release_date"
 // @Success 200 {object} models.FilmsListResp
 // @Failure 500 {object} httpErrors.RestErr
 // @Router /films/list [get]
@@ -75,11 +81,18 @@ func (h *filmHandlers) GetAll() echo.HandlerFunc {
 			utils.LogResponseError(c, h.logger, err)
 			return c.JSON(httpErrors.ErrorResponse(err))
 		}
+		orderBy := c.QueryParam("order_by")
+		if orderBy != "" && !utils.IsIncludedInSlice(orderBy, constatnts.FilmOrderBy) {
+			utils.LogResponseError(c, h.logger, err)
+			return c.JSON(http.StatusBadRequest, fmt.Errorf("%v is invalid order_by type", orderBy).Error())
+		}
 
 		filmsList, err := h.filmsUs.GetAll(c.Request().Context(), models.FilmsListReq{
-			Limit:  uint32(pq.Limit),
-			Page:   uint32(pq.Page),
-			Search: pq.Search,
+			Limit:         uint32(pq.Limit),
+			Page:          uint32(pq.Page),
+			Search:        pq.Search,
+			SearchByActor: c.QueryParam("search_by_actor"),
+			OrderBy:       orderBy,
 		})
 		if err != nil {
 			utils.LogResponseError(c, h.logger, err)
@@ -183,5 +196,42 @@ func (h *filmHandlers) GetByID() echo.HandlerFunc {
 		}
 
 		return c.JSON(http.StatusOK, actor)
+	}
+}
+
+// GetFilmActors
+// @Summary Get film actors
+// @Description Get film actors by film_id
+// @Tags Film
+// @Accept  json
+// @Produce  json
+// @Param film_id path string true "film_id"
+// @Success 200 {object} models.GetFilmActorsResp
+// @Failure 500 {object} httpErrors.RestErr
+// @Router /films/{film_id} [get]
+func (h *filmHandlers) GetFilmActors() echo.HandlerFunc {
+	return func(c echo.Context) error {
+
+		filmID, err := uuid.Parse(c.Param("film_id"))
+		if err != nil {
+			utils.LogResponseError(c, h.logger, err)
+			return c.JSON(httpErrors.ErrorResponse(err))
+		}
+		if !utils.IsUUID(filmID.String()) {
+			utils.LogResponseError(c, h.logger, fmt.Errorf("%v is not valid uuid", filmID))
+			return c.JSON(http.StatusBadRequest, fmt.Errorf("%v is not valid uuid", filmID).Error())
+		}
+
+		resp, err := h.filmsUs.GetFilmActors(c.Request().Context(), filmID)
+		if err != nil {
+			if errors.Is(err, constatnts.ErrRecordNotFound) {
+				utils.LogResponseError(c, h.logger, err)
+				return c.JSON(http.StatusBadRequest, err.Error())
+			}
+			utils.LogResponseError(c, h.logger, err)
+			return c.JSON(httpErrors.ErrorResponse(err))
+		}
+
+		return c.JSON(http.StatusOK, mappers.ToActorFromFilmActor(resp))
 	}
 }

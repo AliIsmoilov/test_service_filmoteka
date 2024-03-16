@@ -96,7 +96,6 @@ func GetPaginationFromCtx(c echo.Context) (*PaginationQuery, error) {
 		return nil, err
 	}
 	q.Search = c.QueryParam("search")
-	fmt.Println(c.QueryParam("search"))
 
 	return q, nil
 }

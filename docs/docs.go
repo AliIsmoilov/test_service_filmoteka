@@ -102,6 +102,42 @@ const docTemplate = `{
                 }
             }
         },
+        "/actors/{actor_id}": {
+            "get": {
+                "description": "Get actor films by actor_id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Actor"
+                ],
+                "summary": "Get actor films",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "actor_id",
+                        "name": "actor_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.GetFilmActorsResp"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {}
+                    }
+                }
+            }
+        },
         "/actors/{id}": {
             "get": {
                 "description": "Get actor by id",
@@ -274,6 +310,12 @@ const docTemplate = `{
                         "in": "query"
                     },
                     {
+                        "type": "string",
+                        "description": "search by actor",
+                        "name": "search_by_actor",
+                        "in": "query"
+                    },
+                    {
                         "type": "integer",
                         "format": "page",
                         "description": "page number",
@@ -286,6 +328,12 @@ const docTemplate = `{
                         "description": "number of elements per page",
                         "name": "limit",
                         "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "order by title, rating, release_date",
+                        "name": "order_by",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -293,6 +341,42 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/models.FilmsListResp"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {}
+                    }
+                }
+            }
+        },
+        "/films/{film_id}": {
+            "get": {
+                "description": "Get film actors by film_id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Film"
+                ],
+                "summary": "Get film actors",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "film_id",
+                        "name": "film_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.GetFilmActorsResp"
                         }
                     },
                     "500": {
@@ -529,6 +613,9 @@ const docTemplate = `{
                 "deleted_at": {
                     "type": "string"
                 },
+                "film": {
+                    "$ref": "#/definitions/models.Film"
+                },
                 "film_id": {
                     "type": "string"
                 },
@@ -570,6 +657,20 @@ const docTemplate = `{
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/models.Film"
+                    }
+                }
+            }
+        },
+        "models.GetFilmActorsResp": {
+            "type": "object",
+            "properties": {
+                "count": {
+                    "type": "integer"
+                },
+                "film_actors": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.Actor"
                     }
                 }
             }
