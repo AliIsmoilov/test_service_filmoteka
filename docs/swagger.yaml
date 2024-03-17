@@ -307,6 +307,8 @@ paths:
         "500":
           description: Internal Server Error
           schema: {}
+      security:
+      - ApiKeyAuth: []
       summary: Get Actor
       tags:
       - Actor
