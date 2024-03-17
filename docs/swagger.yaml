@@ -113,6 +113,42 @@ definitions:
           $ref: '#/definitions/models.Actor'
         type: array
     type: object
+  models.SignUpSwagger:
+    properties:
+      acces_token:
+        type: string
+      name:
+        minLength: 3
+        type: string
+      password:
+        type: string
+      phone_number:
+        type: string
+      refresh_token:
+        type: string
+      role:
+        type: integer
+      user_name:
+        type: string
+    required:
+    - name
+    type: object
+  models.UserSwagger:
+    properties:
+      name:
+        minLength: 3
+        type: string
+      password:
+        type: string
+      phone_number:
+        type: string
+      role:
+        type: integer
+      user_name:
+        type: string
+    required:
+    - name
+    type: object
 info:
   contact: {}
 paths:
@@ -440,4 +476,29 @@ paths:
       summary: Get Films
       tags:
       - Film
+  /users/:
+    post:
+      consumes:
+      - application/json
+      description: user sign up
+      parameters:
+      - description: body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/models.UserSwagger'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.SignUpSwagger'
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: user sign up
+      tags:
+      - User
 swagger: "2.0"

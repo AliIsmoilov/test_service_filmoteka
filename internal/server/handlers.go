@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"test_service_filmoteka/docs"
+	myMiddleware "test_service_filmoteka/internal/middleware"
 	"test_service_filmoteka/pkg/csrf"
 
 	"github.com/labstack/echo/v4"
@@ -31,6 +32,10 @@ func (s *Server) MapHandlers(e *echo.Echo) error {
 	filmRepo := repoRepository.NewFilmsRepository(s.db)
 	filmUC := repoUseCase.NewFilmUseCase(s.cfg, filmRepo, s.logger)
 	filmsHandlers := repoHttp.NewFilmHandler(s.cfg, filmUC, s.logger)
+
+	usersRepo := repoRepository.NewUsersRepository(s.db)
+	usersUC := repoUseCase.NewUsersUseCase(s.cfg, usersRepo, s.logger)
+	usersHandlers := repoHttp.NewUsersHandler(s.cfg, usersUC, s.logger)
 
 	docs.SwaggerInfo.Version = "1.0"
 	docs.SwaggerInfo.Title = "App API"
@@ -60,6 +65,7 @@ func (s *Server) MapHandlers(e *echo.Echo) error {
 	}))
 	e.Use(middleware.Secure())
 	e.Use(middleware.BodyLimit("2M"))
+	e.Use(myMiddleware.Check())
 
 	v1 := e.Group("/v1")
 
@@ -69,6 +75,9 @@ func (s *Server) MapHandlers(e *echo.Echo) error {
 
 	filmsGroup := v1.Group("/films")
 	repoHttp.MapFilmRoutes(filmsGroup, filmsHandlers)
+
+	usersGroup := v1.Group("/users/")
+	repoHttp.MapUsersRoutes(usersGroup, usersHandlers)
 
 	health.GET("", func(c echo.Context) error {
 		return c.JSON(http.StatusOK, map[string]string{"status": "healthy!"})

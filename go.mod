@@ -9,9 +9,9 @@ require (
 	github.com/DATA-DOG/go-sqlmock v1.5.2
 	github.com/brianvoe/gofakeit/v6 v6.28.0
 	github.com/go-playground/validator/v10 v10.11.2
-	github.com/golang/mock v1.4.4
 	github.com/google/uuid v1.3.0
 	github.com/jackc/pgx v3.6.2+incompatible
+	github.com/labstack/echo v3.3.10+incompatible
 	github.com/labstack/echo/v4 v4.11.4
 	github.com/microcosm-cc/bluemonday v1.0.20
 	github.com/pkg/errors v0.9.1
