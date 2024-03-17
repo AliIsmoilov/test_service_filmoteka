@@ -498,8 +498,9 @@ paths:
     post:
       consumes:
       - application/json
-      description: for creating admin role and Get access to all apis signup with
-        role 2
+      description: |-
+        DESCRIPTION:
+        for creating admin role and Get access to all apis signup with role 2
       parameters:
       - description: body
         in: body

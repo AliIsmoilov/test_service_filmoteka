@@ -535,7 +535,7 @@ const docTemplate = `{
         },
         "/users/": {
             "post": {
-                "description": "for creating admin role and Get access to all apis signup with role 2",
+                "description": "DESCRIPTION:\nfor creating admin role and Get access to all apis signup with role 2",
                 "consumes": [
                     "application/json"
                 ],

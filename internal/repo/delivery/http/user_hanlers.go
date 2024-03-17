@@ -29,6 +29,7 @@ func NewUsersHandler(cfg *config.Config, userUC repos.UsersUseCase, logger logge
 
 // SignUp
 // @Summary user sign up
+// @Description DESCRIPTION: 
 // @Description for creating admin role and Get access to all apis signup with role 2
 // @Tags User
 // @Accept  json
