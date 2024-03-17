@@ -55,6 +55,11 @@ const docTemplate = `{
         },
         "/actors/list": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Get all actor",
                 "consumes": [
                     "application/json"

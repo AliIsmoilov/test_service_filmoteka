@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"time"
 
@@ -68,7 +69,7 @@ func LogResponseError(ctx echo.Context, logger logger.Logger, err error) {
 		GetRequestID(ctx),
 		GetIPAddress(ctx),
 		err,
-	)	
+	)
 }
 
 // Read request body and validate
@@ -124,4 +125,49 @@ func CheckImageFileContentType(fileContent []byte) (string, error) {
 
 func BodyParser(r *http.Request, body interface{}) error {
 	return json.NewDecoder(r.Body).Decode(&body)
+}
+
+func HandleUnauthorizedWithMessage(w http.ResponseWriter, message string) {
+	w.Header().Add("WWW-Authenticate", `Basic realm="Give username and password"`)
+	w.WriteHeader(http.StatusUnauthorized)
+
+	log.Println(message)
+	writeJSON(w, response{Error: true,
+		Data: errorInfo{
+			Status:  http.StatusUnauthorized,
+			Message: message,
+		}})
+}
+
+func writeJSON(w http.ResponseWriter, data interface{}) {
+	bytes, _ := json.MarshalIndent(data, "", "  ")
+
+	w.Header().Set("Content-Type", "Application/json")
+	w.Write(bytes)
+}
+
+type response struct {
+	Error bool        `json:"error"`
+	Data  interface{} `json:"data"`
+}
+
+// errorInfo ...
+type errorInfo struct {
+	Status  int    `json:"status"`
+	Message string `json:"message"`
+}
+
+func HandleForbiddenErrWithMessage(w http.ResponseWriter, err error, message string) error {
+	if err == nil {
+		return nil
+	}
+
+	log.Println(message+" ", err)
+	w.WriteHeader(http.StatusForbidden)
+	writeJSON(w, response{Error: true,
+		Data: errorInfo{
+			Status:  http.StatusForbidden,
+			Message: message + ": " + err.Error(),
+		}})
+	return err
 }

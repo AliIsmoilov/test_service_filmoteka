@@ -21,7 +21,12 @@ import (
 // @version 1.0
 // @description This is a sample server for using Swagger with Echo.
 // @host localhost:8080
+// @securityDefinitions.apikey ApiKeyAuth
+// @in header
+// @name Authorization
 // @BasePath /api/v1
+// @BasePath /
+// @schemes http
 func (s *Server) MapHandlers(e *echo.Echo) error {
 
 	// Init repositories
@@ -38,8 +43,8 @@ func (s *Server) MapHandlers(e *echo.Echo) error {
 	usersHandlers := repoHttp.NewUsersHandler(s.cfg, usersUC, s.logger)
 
 	docs.SwaggerInfo.Version = "1.0"
-	docs.SwaggerInfo.Title = "App API"
-	docs.SwaggerInfo.Description = "REST API."
+	docs.SwaggerInfo.Title = "filmoteka"
+	docs.SwaggerInfo.Description = "filmoteka REST APIS."
 	docs.SwaggerInfo.Version = "1.0"
 	docs.SwaggerInfo.BasePath = "/v1"
 
@@ -63,9 +68,16 @@ func (s *Server) MapHandlers(e *echo.Echo) error {
 			return strings.Contains(c.Request().URL.Path, "swagger")
 		},
 	}))
+
+	// casbinAuth for permission checker
+	casbinAuth, err := myMiddleware.NewCasbinJWTRoleAuthorizer()
+	if err != nil {
+		return err
+	}
+	e.Use(casbinAuth.Check())
+
 	e.Use(middleware.Secure())
 	e.Use(middleware.BodyLimit("2M"))
-	e.Use(myMiddleware.Check())
 
 	v1 := e.Group("/v1")
 

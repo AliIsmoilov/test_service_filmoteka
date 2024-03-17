@@ -17,6 +17,9 @@ import (
 // @contact.name Alimadad Ismoilov
 // @contact.url https://github.com/AliIsmoilov
 // @contact.email alimadadismoilov@gmail.com
+// @securityDefinitions.apikey ApiKeyAuth
+// @in header
+// @name Authorization
 // @BasePath /api/v1
 func main() {
 	log.Println("Starting api server")

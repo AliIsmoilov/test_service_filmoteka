@@ -168,6 +168,7 @@ func (h *actorHandlers) GetByID() echo.HandlerFunc {
 // @Param limit query int false "number of elements per page" Format(limit)
 // @Success 200 {object} models.ActorsListResp
 // @Failure 500 {object} httpErrors.RestErr
+// @Security ApiKeyAuth
 // @Router /actors/list [get]
 func (h *actorHandlers) GetAll() echo.HandlerFunc {
 	return func(c echo.Context) error {

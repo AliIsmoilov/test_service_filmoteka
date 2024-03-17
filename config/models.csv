@@ -1,0 +1,4 @@
+p, any, /v1/*, GET 
+
+p, user, /v1/actors/list, GET
+p, admin, /v1/actors/list, GET
