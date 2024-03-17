@@ -1,4 +1,32 @@
 p, any, /v1/*, GET 
 
-p, user, /v1/actors/list, GET
+p, admin, /v1/actors, POST
+p, admin, /v1/actors/:id, DELETE
+p, admin, /v1/actors/:id, PUT
+p, admin, /v1/actors/:id, GET
+p, admin, /v1/actors/:actor_id, GET
 p, admin, /v1/actors/list, GET
+
+p, user, /v1/actors/list, GET
+p, user, /v1/actors/:actor_id, GET
+p, user, /v1/actors/:id, GET
+p, unauthorized, /v1/actors/list, GET
+p, unauthorized, /v1/actors/:actor_id, GET
+p, unauthorized, /v1/actors/:id, GET
+
+
+p, admin, /v1/films, POST
+p, admin, /v1/films/list, GET
+p, admin, /v1/films/:id, DELETE
+p, admin, /v1/films/:id, PUT
+p, admin, /v1/films/:id, GET
+p, admin, /v1/films/:film_id, GET
+
+p, user, /v1/films/list, GET
+p, user, /v1/films/:id, GET
+p, user, /v1/films/:film_id, GET
+p, unauthorized, /v1/films/list, GET
+p, unauthorized, /v1/films/:id, GET
+p, unauthorized, /v1/films/:film_id, GET
+
+p, unauthorized, /v1/users/, POST

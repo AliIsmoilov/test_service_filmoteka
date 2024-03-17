@@ -1,6 +1,7 @@
 package models
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/google/uuid"
@@ -33,4 +34,12 @@ type ActorsListReq struct {
 	Limit  uint32
 	Page   uint32
 	Search string
+}
+
+func (a Actor) Validate() error {
+
+	if a.Gender != "male" && a.Gender != "female" {
+		return fmt.Errorf("gender should be male or female")
+	}
+	return nil
 }

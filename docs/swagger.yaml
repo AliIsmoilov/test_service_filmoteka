@@ -150,7 +150,13 @@ definitions:
     - name
     type: object
 info:
-  contact: {}
+  contact:
+    email: alimadadismoilov@gmail.com
+    name: Alimadad Ismoilov
+    url: https://github.com/AliIsmoilov
+  description: Golang app
+  title: Go app
+  version: "1.0"
 paths:
   /actors:
     post:
@@ -174,6 +180,8 @@ paths:
         "500":
           description: Internal Server Error
           schema: {}
+      security:
+      - ApiKeyAuth: []
       summary: create new actor
       tags:
       - Actor
@@ -222,6 +230,8 @@ paths:
         "500":
           description: Internal Server Error
           schema: {}
+      security:
+      - ApiKeyAuth: []
       summary: Delete actor
       tags:
       - Actor
@@ -274,6 +284,8 @@ paths:
         "500":
           description: Internal Server Error
           schema: {}
+      security:
+      - ApiKeyAuth: []
       summary: Update actor
       tags:
       - Actor
@@ -307,8 +319,6 @@ paths:
         "500":
           description: Internal Server Error
           schema: {}
-      security:
-      - ApiKeyAuth: []
       summary: Get Actor
       tags:
       - Actor
@@ -334,6 +344,8 @@ paths:
         "500":
           description: Internal Server Error
           schema: {}
+      security:
+      - ApiKeyAuth: []
       summary: create new film
       tags:
       - Film
@@ -382,6 +394,8 @@ paths:
         "500":
           description: Internal Server Error
           schema: {}
+      security:
+      - ApiKeyAuth: []
       summary: Delete film
       tags:
       - Film
@@ -434,6 +448,8 @@ paths:
         "500":
           description: Internal Server Error
           schema: {}
+      security:
+      - ApiKeyAuth: []
       summary: Update film
       tags:
       - Film
@@ -482,7 +498,8 @@ paths:
     post:
       consumes:
       - application/json
-      description: user sign up
+      description: for creating admin role and Get access to all apis signup with
+        role 2
       parameters:
       - description: body
         in: body
@@ -503,4 +520,9 @@ paths:
       summary: user sign up
       tags:
       - User
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"

@@ -39,6 +39,7 @@ func NewHandler(cfg *config.Config, actorsUC repos.ActorsUseCase, logger logger.
 // @Param body body models.ActorSwagger true "body"
 // @Success 201 {object} models.Actor
 // @Failure 500 {object} httpErrors.RestErr
+// @Security ApiKeyAuth
 // @Router /actors [post]
 func (h *actorHandlers) Create() echo.HandlerFunc {
 	return func(c echo.Context) error {
@@ -47,7 +48,10 @@ func (h *actorHandlers) Create() echo.HandlerFunc {
 		if err := utils.SanitizeRequest(c, actor); err != nil {
 			return utils.ErrResponseWithLog(c, h.logger, err)
 		}
-
+		if err := actor.Validate(); err != nil {
+			utils.LogResponseError(c, h.logger, err)
+			return c.JSON(http.StatusBadRequest, err.Error())
+		}
 		actor.ID = uuid.New()
 		createdActor, err := h.actorsUC.Create(c.Request().Context(), actor)
 		if err != nil {
@@ -69,6 +73,7 @@ func (h *actorHandlers) Create() echo.HandlerFunc {
 // @Param body body models.ActorSwagger true "body"
 // @Success 200 {object} models.ActorSwagger
 // @Failure 500 {object} httpErrors.RestErr
+// @Security ApiKeyAuth
 // @Router /actors/{id} [put]
 func (h *actorHandlers) Update() echo.HandlerFunc {
 	return func(c echo.Context) error {
@@ -109,6 +114,7 @@ func (h *actorHandlers) Update() echo.HandlerFunc {
 // @Param id path string true "id"
 // @Success 200 {string} string	"ok"
 // @Failure 500 {object} httpErrors.RestErr
+// @Security ApiKeyAuth
 // @Router /actors/{id} [delete]
 func (h *actorHandlers) Delete() echo.HandlerFunc {
 	return func(c echo.Context) error {
@@ -168,7 +174,6 @@ func (h *actorHandlers) GetByID() echo.HandlerFunc {
 // @Param limit query int false "number of elements per page" Format(limit)
 // @Success 200 {object} models.ActorsListResp
 // @Failure 500 {object} httpErrors.RestErr
-// @Security ApiKeyAuth
 // @Router /actors/list [get]
 func (h *actorHandlers) GetAll() echo.HandlerFunc {
 	return func(c echo.Context) error {
