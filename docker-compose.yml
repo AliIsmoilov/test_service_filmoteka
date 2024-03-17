@@ -23,6 +23,6 @@ services:
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=todo_db
+      - POSTGRES_DB=filmoteka_db
     volumes:
       - ./pgdata:/var/lib/postgresql/data
