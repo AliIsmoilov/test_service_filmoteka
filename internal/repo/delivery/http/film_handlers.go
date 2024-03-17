@@ -37,6 +37,7 @@ func NewFilmHandler(cfg *config.Config, filmsUs repos.FilmUseCase, logger logger
 // @Param body body models.FilmSwagger true "body"
 // @Success 201 {object} models.Film
 // @Failure 500 {object} httpErrors.RestErr
+// @Security ApiKeyAuth
 // @Router /films [post]
 func (h *filmHandlers) Create() echo.HandlerFunc {
 	return func(c echo.Context) error {
@@ -113,6 +114,7 @@ func (h *filmHandlers) GetAll() echo.HandlerFunc {
 // @Param body body models.FilmSwagger true "body"
 // @Success 200 {object} models.FilmSwagger
 // @Failure 500 {object} httpErrors.RestErr
+// @Security ApiKeyAuth
 // @Router /films/{id} [put]
 func (h *filmHandlers) Update() echo.HandlerFunc {
 	return func(c echo.Context) error {
@@ -147,6 +149,7 @@ func (h *filmHandlers) Update() echo.HandlerFunc {
 // @Param id path string true "id"
 // @Success 200 {string} string	"ok"
 // @Failure 500 {object} httpErrors.RestErr
+// @Security ApiKeyAuth
 // @Router /films/{id} [delete]
 func (h *filmHandlers) Delete() echo.HandlerFunc {
 	return func(c echo.Context) error {

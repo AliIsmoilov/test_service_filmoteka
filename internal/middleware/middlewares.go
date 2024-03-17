@@ -37,7 +37,6 @@ func (jwta *JWTRoleAuthorizer) Check() echo.MiddlewareFunc {
 // See: [CORS].
 func (jwta *JWTRoleAuthorizer) CheckAuth(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
-		fmt.Println("CheckAuth........")
 		req := c.Request()
 		allowed, err := jwta.checkPermission(req)
 		if err != nil {
@@ -83,16 +82,18 @@ func (jwta *JWTRoleAuthorizer) checkPermission(r *http.Request) (bool, error) {
 	role := userMetadata["role"].(string)
 	method := r.Method
 	enforsed, err := jwta.enforcer.Enforce(role, path, method)
+	fmt.Printf("role: %v, path: %v, method: %v\n", role, path, method)
 	if enforsed && role == "unauthorized" {
-		// Authorize request with basicAuth
-		username, password, ok := r.BasicAuth()
-		if !ok {
-			return false, constants.ErrAuthNotGiven
-		}
+		// // Authorize request with basicAuth
+		// username, password, ok := r.BasicAuth()
+		// if !ok {
+		// 	return false, constants.ErrAuthNotGiven
+		// }
 
-		if !IsSuperAdmin(username, password) {
-			return false, constants.ErrAuthIncorrect
-		}
+		// if !IsSuperAdmin(username, password) {
+		// 	return false, constants.ErrAuthIncorrect
+		// }
+		return enforsed, nil
 	}
 	return enforsed, err
 }

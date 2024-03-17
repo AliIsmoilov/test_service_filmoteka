@@ -9,7 +9,11 @@ const docTemplate = `{
     "info": {
         "description": "{{escape .Description}}",
         "title": "{{.Title}}",
-        "contact": {},
+        "contact": {
+            "name": "Alimadad Ismoilov",
+            "url": "https://github.com/AliIsmoilov",
+            "email": "alimadadismoilov@gmail.com"
+        },
         "version": "{{.Version}}"
     },
     "host": "{{.Host}}",
@@ -17,6 +21,11 @@ const docTemplate = `{
     "paths": {
         "/actors": {
             "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "create new actor",
                 "consumes": [
                     "application/json"
@@ -55,11 +64,6 @@ const docTemplate = `{
         },
         "/actors/list": {
             "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
                 "description": "Get all actor",
                 "consumes": [
                     "application/json"
@@ -179,6 +183,11 @@ const docTemplate = `{
                 }
             },
             "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "update new actor",
                 "consumes": [
                     "application/json"
@@ -222,6 +231,11 @@ const docTemplate = `{
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "delete actor",
                 "consumes": [
                     "application/json"
@@ -258,6 +272,11 @@ const docTemplate = `{
         },
         "/films": {
             "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "create new film",
                 "consumes": [
                     "application/json"
@@ -427,6 +446,11 @@ const docTemplate = `{
                 }
             },
             "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "update film actor",
                 "consumes": [
                     "application/json"
@@ -470,6 +494,11 @@ const docTemplate = `{
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "delete film",
                 "consumes": [
                     "application/json"
@@ -506,7 +535,7 @@ const docTemplate = `{
         },
         "/users/": {
             "post": {
-                "description": "user sign up",
+                "description": "for creating admin role and Get access to all apis signup with role 2",
                 "consumes": [
                     "application/json"
                 ],
@@ -772,17 +801,24 @@ const docTemplate = `{
                 }
             }
         }
+    },
+    "securityDefinitions": {
+        "ApiKeyAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        }
     }
 }`
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
-	Version:          "",
+	Version:          "1.0",
 	Host:             "",
 	BasePath:         "",
 	Schemes:          []string{},
-	Title:            "",
-	Description:      "",
+	Title:            "Go app",
+	Description:      "Golang app",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",

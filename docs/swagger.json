@@ -1,11 +1,23 @@
 {
     "swagger": "2.0",
     "info": {
-        "contact": {}
+        "description": "Golang app",
+        "title": "Go app",
+        "contact": {
+            "name": "Alimadad Ismoilov",
+            "url": "https://github.com/AliIsmoilov",
+            "email": "alimadadismoilov@gmail.com"
+        },
+        "version": "1.0"
     },
     "paths": {
         "/actors": {
             "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "create new actor",
                 "consumes": [
                     "application/json"
@@ -44,11 +56,6 @@
         },
         "/actors/list": {
             "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
                 "description": "Get all actor",
                 "consumes": [
                     "application/json"
@@ -168,6 +175,11 @@
                 }
             },
             "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "update new actor",
                 "consumes": [
                     "application/json"
@@ -211,6 +223,11 @@
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "delete actor",
                 "consumes": [
                     "application/json"
@@ -247,6 +264,11 @@
         },
         "/films": {
             "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "create new film",
                 "consumes": [
                     "application/json"
@@ -416,6 +438,11 @@
                 }
             },
             "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "update film actor",
                 "consumes": [
                     "application/json"
@@ -459,6 +486,11 @@
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "delete film",
                 "consumes": [
                     "application/json"
@@ -495,7 +527,7 @@
         },
         "/users/": {
             "post": {
-                "description": "user sign up",
+                "description": "for creating admin role and Get access to all apis signup with role 2",
                 "consumes": [
                     "application/json"
                 ],
@@ -760,6 +792,13 @@
                     "type": "string"
                 }
             }
+        }
+    },
+    "securityDefinitions": {
+        "ApiKeyAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
         }
     }
 }
