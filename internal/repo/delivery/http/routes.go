@@ -19,7 +19,7 @@ func MapActorsRoutes(group *echo.Group, h repos.ActorHandlers) {
 	group.GET("/:actor_id", h.GetActorFilms())
 }
 
-// Map actors routes
+// Map films routes
 func MapFilmRoutes(group *echo.Group, h repos.FilmHandlers) {
 	group.POST("", h.Create())
 	group.GET("/list", h.GetAll())
@@ -27,4 +27,10 @@ func MapFilmRoutes(group *echo.Group, h repos.FilmHandlers) {
 	group.PUT("/:id", h.Update())
 	group.GET("/:id", h.GetByID())
 	group.GET("/:film_id", h.GetFilmActors())
+}
+
+// Map users routes
+func MapUsersRoutes(group *echo.Group, h repos.UserHandlers) {
+	group.POST("", h.SignUp())
+
 }

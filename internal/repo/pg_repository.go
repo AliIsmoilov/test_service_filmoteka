@@ -27,3 +27,7 @@ type FilmsRepository interface {
 	GetByID(ctx context.Context, id uuid.UUID) (*models.Film, error)
 	GetFilmActors(ctx context.Context, filmId uuid.UUID) ([]models.FilmActor, error)
 }
+
+type UsersRepository interface {
+	SignUp(ctx context.Context, user *models.User) (*models.User, error)
+}

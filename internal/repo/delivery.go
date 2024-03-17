@@ -20,3 +20,7 @@ type FilmHandlers interface {
 	GetByID() echo.HandlerFunc
 	GetFilmActors() echo.HandlerFunc
 }
+
+type UserHandlers interface {
+	SignUp() echo.HandlerFunc
+}
